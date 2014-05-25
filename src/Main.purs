@@ -48,10 +48,21 @@ foreign import newLatLng
   \ };\
   \}" :: forall eff. Number -> Number -> Eff eff LatLng
 
+foreign import panTo
+  "function panTo(map) {\
+  \  return function(x) {\
+  \    return function() {\
+  \      map.panTo(x);\
+  \      return;\
+  \    };\
+  \  };\
+  \}" :: forall eff. Map -> LatLng -> Eff eff Unit
 
 
 main = do
   mapE <- getElementById "map-canvas"
   startingPoint <- newLatLng 0.0 0.0
-  gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
+  roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
+  randomcoord <- newLatLng (-34.397) 150.644
+  panTo roadmap randomcoord
   trace "hi"
