@@ -9,9 +9,6 @@ import Debug.Trace
 
 import Control.Monad.Eff
 
-import Graphics.Canvas
-import Graphics.Canvas.Drawing
-
 foreign import data Element :: *
 foreign import data Map :: *
 
@@ -20,7 +17,7 @@ foreign import getElementById
   \  return function() {\
   \    return document.getElementById(id);\
   \  };\
-  \}" :: forall eff. String -> Eff eff CanvasElement
+  \}" :: forall eff. String -> Eff eff Element
 
 data MapOptions = MapOptions {
     zoom :: Number
@@ -35,7 +32,7 @@ foreign import gMap
   \      return (new google.maps.Map(ele, opts.values[0]));\
   \    };\
   \  };\
-  \}" :: forall eff. CanvasElement -> MapOptions -> Eff eff Map
+  \}" :: forall eff. Element -> MapOptions -> Eff eff Map
 
 data LatLng
 
