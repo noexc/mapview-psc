@@ -1,0 +1,19 @@
+{
+  "name": "mapview-psc",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Ricky Elrod",
+  "license": "MIT",
+  "dependencies": {
+    "grunt": "~0.4.4",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-purescript": "~0.5.0",
+    "browserify": "*",
+    "grunt-browserify": "*"
+  },
+  "devDependencies": {
+    "bower": "*",
+    "grunt-cli": "*"
+  }
+}
