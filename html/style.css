@@ -1,0 +1,63 @@
+body {
+    color: #777;
+    font-family: Futura, 'Futura Std', 'Oswald', sans-serif;
+}
+
+.button-xsmall { font-size: 70%; }
+.button-small { font-size: 85%; }
+.button-large { font-size: 110%; }
+.button-xlarge { font-size: 125%; }
+.button-secondary {
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.alert { background-color: #923130; }
+.info  { background-color: #1F8DD6; }
+.yay   { background-color: #319230; }
+
+#announcement {
+    color: #eeeeee;
+    font-size: 120%;
+    text-align: center;
+    padding: 0.5em 0;
+}
+
+.mv-menu {
+    background-color: #2D3E50;
+    padding: 0.5em 0;
+    font-family: Futura, 'Futura Std', 'Oswald', sans-serif !important;
+}
+
+.mv-menu a {
+    color: #777;
+}
+
+.mv-menu.pure-menu-open {
+    background: #2d3e50;
+}
+
+
+.mv-menu .pure-menu-heading {
+    color: white;
+    font-weight: 400;
+    font-size: 120%;
+}
+
+.mv-menu .pure-menu-selected a {
+    color: white;
+}
+
+.mv-menu a {
+    color: #6FBEF3;
+}
+.mv-menu li a:hover,
+.mv-menu li a:focus {
+    background: none;
+    border: none;
+    color: #AECFE5;
+}
+
+.mv-menu ul {
+    float: right;
+}

@@ -2,6 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.4.2/pure-min.css">
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
       html, body, #map-canvas {
         margin: 0;
@@ -10,8 +14,25 @@
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <!--[if lt IE 9]>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+    <![endif]-->
   </head>
   <body>
+    <div class="header">
+      <div class="mv-menu pure-menu pure-menu-open pure-menu-horizontal">
+        <a class="pure-menu-heading" href="/">UA-HABP3 MapView</a>
+        <ul>
+          <li><a href="#">Last update: X secs ago</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="announcement" class="yay">
+      <span id="announcement_text">
+        <strong>Chase team</strong>: Welcome to mapview 2.0!
+      </span>
+      <button id="dismiss_announcement" class="button-secondary pure-button button-xsmall">Close</button>
+    </div>
     <div id="map-canvas"></div>
     <script type="text/javascript" src="index.js"></script>
   </body>
