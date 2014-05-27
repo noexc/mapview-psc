@@ -43,6 +43,7 @@ main = do
   roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
   randomcoord <- newLatLng (-34.397) 150.644
   panTo roadmap randomcoord
+  newMarker (MarkerOptions { position: randomcoord, map: roadmap, title: "HABP Location" })
 
   socket <- newWebSocket "ws://echo.websocket.org/"
   addEventListenerWS socket "onmessage" updateMap
