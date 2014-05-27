@@ -1,4 +1,4 @@
-module GMaps.Map where
+module GMaps.Map (Map (), gMap, panTo) where
 
 import Control.Monad.Eff
 import DomHelpers
@@ -7,15 +7,17 @@ import GMaps.MapOptions
 
 foreign import data Map :: *
 
-foreign import gMap
-  "function gMap(ele) {\
+foreign import gMapFFI
+  "function gMapFFI(ele) {\
   \  return function(opts) {\
   \    return function() {\
-  \      return (new google.maps.Map(ele, opts.values[0]));\
+  \      return (new google.maps.Map(ele, opts));\
   \    };\
   \  };\
-  \}" :: forall eff. Element -> MapOptions -> Eff eff Map
+  \}" :: forall eff. Element -> { zoom :: Number, center :: LatLng, mapTypeId :: String } -> Eff eff Map
 
+gMap :: forall eff. Element -> MapOptions -> Eff eff Map
+gMap e m = gMapFFI e (runMapOptions m)
 
 foreign import panTo
   "function panTo(map) {\
