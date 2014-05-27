@@ -11,7 +11,7 @@ import Control.Monad.Eff
 
 import DomHelpers
 import GMaps
-
+import WebSocket
 
 setDismissAnnouncement :: forall eff. Eff eff Unit
 setDismissAnnouncement = do
@@ -28,6 +28,13 @@ setAnnouncement t c = do
   setClass announcement c
   setDisplay announcement "block"
 
+foreign import getData
+  "function getData(x) {\
+  \  return function() {\
+  \    return x.data;\
+  \  };\
+  \}" :: forall eff. Event -> Eff eff String
+
 main :: Eff (trace :: Trace) {}
 main = do
   setDismissAnnouncement
@@ -36,4 +43,13 @@ main = do
   roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
   randomcoord <- newLatLng (-34.397) 150.644
   panTo roadmap randomcoord
+
+  socket <- newWebSocket "ws://echo.websocket.org/"
+  addEventListenerWS socket "onmessage" updateMap
+  sendWS socket "testing"
+
   trace "hi"
+  where
+    updateMap e = do
+      msgData <- getData e
+      trace msgData
