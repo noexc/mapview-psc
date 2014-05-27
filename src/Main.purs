@@ -10,7 +10,13 @@ import Debug.Trace
 import Control.Monad.Eff
 
 import DomHelpers
-import GMaps
+
+import GMaps.InfoWindow
+import GMaps.LatLng
+import GMaps.Map
+import GMaps.MapOptions
+import GMaps.Marker
+
 import WebSocket
 
 setDismissAnnouncement :: forall eff. Eff eff Unit
