@@ -16,6 +16,12 @@ data MarkerOptions = MarkerOptions
   , title :: String
   }
 
+data InfoWindowOptions = InfoWindowOptions
+  { content :: String
+  }
+
+data InfoWindow
+
 data Marker
 
 foreign import data Map :: *
@@ -65,3 +71,22 @@ foreign import setMarkerPosition
   \    };\
   \  };\
   \}" :: forall eff. MarkerOptions -> Eff eff {}
+
+foreign import newInfoWindow
+  "function newInfoWindow(opts) {\
+  \  return function() {\
+  \    return new google.maps.InfoWindow(opts.values[0]);\
+  \  };\
+  \}" :: forall eff. InfoWindowOptions -> Eff eff InfoWindow
+
+foreign import openInfoWindow
+  "function openInfoWindow(iw) {\
+  \  return function(map) {\
+  \    return function(marker) {\
+  \      return function() {\
+  \        iw.open(map, marker);\
+  \        return;\
+  \      };\
+  \    };\
+  \  };\
+  \}" :: forall eff. InfoWindow -> Map -> Marker -> Eff eff {}
