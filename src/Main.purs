@@ -16,6 +16,8 @@ import GMaps.LatLng
 import GMaps.Map
 import GMaps.MapOptions
 import GMaps.Marker
+import GMaps.MVCArray
+import GMaps.Polyline
 
 import WebSocket
 
@@ -49,6 +51,19 @@ main = do
   roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
   randomcoord <- newLatLng (-34.397) 150.644
   panTo roadmap randomcoord
+
+  mvcA <- newMVCArray :: forall eff. Eff eff (MVCArray LatLng)
+  testcoord <- newLatLng (-34.397) 151.644
+  pushMVCArray mvcA testcoord
+  pushMVCArray mvcA randomcoord
+
+  polyline <- newPolyline (PolylineOptions { geodescic: true
+                                           , strokeColor: "#ff0000"
+                                           , strokeOpacity: 1.0
+                                           , strokeWeight: 2
+                                           , map: roadmap
+                                           })
+  setPolylinePath polyline mvcA
 
   marker <- newMarker (MarkerOptions { position: randomcoord, map: roadmap, title: "HABP Location" })
   iw <- newInfoWindow (InfoWindowOptions { content: "HABP Location" })
