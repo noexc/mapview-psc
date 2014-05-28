@@ -3,3 +3,4 @@ output/
 bower_components/
 node_modules/
 html/index.js
+.psci_modules/
