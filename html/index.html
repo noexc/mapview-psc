@@ -23,7 +23,7 @@
       <div class="mv-menu pure-menu pure-menu-open pure-menu-horizontal">
         <a class="pure-menu-heading" href="/">UA-HABP3 MapView</a>
         <ul>
-          <li><a href="#">Last update: X secs ago</a></li>
+          <li><a href="#">Last update: <span id="lastupdate">(no update yet)</span></a></li>
         </ul>
       </div>
     </div>
@@ -34,6 +34,7 @@
       <button id="dismiss_announcement" class="button-secondary pure-button button-xsmall">Close</button>
     </div>
     <div id="map-canvas"></div>
-    <script type="text/javascript" src="index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>

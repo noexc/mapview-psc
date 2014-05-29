@@ -1,6 +1,7 @@
 tmp/
 output/
 js/
+release/
 bower_components/
 node_modules/
 html/index.js

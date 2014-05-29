@@ -11,7 +11,7 @@ module.exports = function(grunt) {
     ],
 
     clean: {
-      all: ["tmp", "output"]
+      all: ["tmp", "output", "release"]
     },
 
     pscMake: {
@@ -20,17 +20,39 @@ module.exports = function(grunt) {
       }
     },
 
-    copy: [
-      {
-        expand: true,
-        cwd: "output",
-        src: ["**"],
-        dest: "tmp/node_modules/"
-      }, {
-        src: ["js/index.js"],
-        dest: "tmp/index.js"
+    uglify: {
+      release: {
+        files: {
+          'release/html/index.js': ['html/index.js']
+        }
       }
-    ],
+    },
+
+    copy: {
+      main: {
+        files: [
+          {
+            expand: true,
+            cwd: "output",
+            src: ["**"],
+            dest: "tmp/node_modules/"
+          },
+          {
+            src: ["js/index.js"],
+            dest: "tmp/index.js"
+          }
+        ]
+      },
+      release: {
+        files: [
+          {
+            expand: true,
+            src: ["html/**"],
+            dest: "release/"
+          }
+        ]
+      }
+    },
 
     browserify: {
       all: {
@@ -44,6 +66,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-purescript");
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask("default", ["pscMake:all", "copy", "browserify:all"]);
+  grunt.registerTask("default", ["pscMake:all", "copy:main", "browserify:all"]);
+  grunt.registerTask("release", ["clean", "pscMake:all", "copy:main", "browserify:all", "copy:release", "uglify:release"]);
 };
