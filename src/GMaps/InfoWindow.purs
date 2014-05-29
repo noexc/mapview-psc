@@ -8,14 +8,22 @@ data InfoWindowOptions = InfoWindowOptions
   { content :: String
   }
 
-data InfoWindow
+foreign import data InfoWindow :: *
 
-foreign import newInfoWindow
-  "function newInfoWindow(opts) {\
+type InfoWindowOptionsR = { content :: String }
+
+runInfoWindowOptions :: InfoWindowOptions -> InfoWindowOptionsR
+runInfoWindowOptions (InfoWindowOptions o) = { content: o.content }
+
+foreign import newInfoWindowFFI
+  "function newInfoWindowFFI(opts) {\
   \  return function() {\
-  \    return new google.maps.InfoWindow(opts.values[0]);\
+  \    return new google.maps.InfoWindow(opts);\
   \  };\
-  \}" :: forall eff. InfoWindowOptions -> Eff eff InfoWindow
+  \}" :: forall eff. InfoWindowOptionsR -> Eff eff InfoWindow
+
+newInfoWindow :: forall eff. InfoWindowOptions -> Eff eff InfoWindow
+newInfoWindow opts = newInfoWindowFFI (runInfoWindowOptions opts)
 
 foreign import openInfoWindow
   "function openInfoWindow(iw) {\
