@@ -10,14 +10,28 @@ data MarkerOptions = MarkerOptions
   , title :: String
   }
 
-data Marker
+foreign import data Marker :: *
 
-foreign import newMarker
-  "function newMarker(opts) {\
+type MarkerOptionsR = { position :: LatLng
+                      , map :: Map
+                      , title :: String
+                      }
+
+runMarkerOptions :: MarkerOptions -> MarkerOptionsR
+runMarkerOptions (MarkerOptions o) = { position: o.position
+                                     , map: o.map
+                                     , title: o.title
+                                     }
+
+foreign import newMarkerFFI
+  "function newMarkerFFI(opts) {\
   \  return function() {\
-  \    return new google.maps.Marker(opts.values[0]);\
+  \    return new google.maps.Marker(opts);\
   \  };\
-  \}" :: forall eff. MarkerOptions -> Eff eff Marker
+  \}" :: forall eff. MarkerOptionsR -> Eff eff Marker
+
+newMarker :: forall eff. MarkerOptions -> Eff eff Marker
+newMarker opts = newMarkerFFI (runMarkerOptions opts)
 
 foreign import setMarkerPosition
   "function setMarkerPosition(marker) {\
