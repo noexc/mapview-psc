@@ -1,9 +1,6 @@
 module Main where
 
-import Data.Array
-import Data.Tuple
-import Data.Traversable
-import Data.Monoid
+import Data.Maybe
 
 import Debug.Trace
 
@@ -20,6 +17,7 @@ import GMaps.MVCArray
 import GMaps.Polyline
 
 import MomentJS
+--import MomentJS.At
 
 import WebSocket
 
@@ -45,7 +43,6 @@ foreign import getData
   \  };\
   \}" :: forall eff. Event -> Eff eff String
 
-main :: Eff (trace :: Trace) {}
 main = do
   setDismissAnnouncement
   mapE <- getElementById "map-canvas"
@@ -75,9 +72,14 @@ main = do
   addEventListenerWS socket "onmessage" updateMap
   sendWS socket "testing"
 
-  leet <- timeAgo "0678" "YYYY"
+  nowMoment <- now
+  let leet = momentConstructor "January 1, 0678"
+  let leet' = createMoment leet
   lastupdate <- getElementById "lastupdate"
-  setInnerHtml lastupdate leet
+  let str = liftMoment2 momentFrom nowMoment <$> leet'
+  let seven = fromMaybe "Unknown" str
+  setInnerHtml lastupdate seven
+
 
   trace "hi"
   where

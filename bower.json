@@ -15,6 +15,7 @@
         "tests"
     ],
     "dependencies": {
-
+        "purescript-datetime": "*",
+        "purescript-control": "*"
     }
 }
