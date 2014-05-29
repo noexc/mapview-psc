@@ -16,7 +16,6 @@ foreign import pushMVCArray
   "function pushMVCArray(arr) {\
   \  return function(ele) {\
   \    return function() {\
-  \      alert(arr);\
   \      arr.push(ele);\
   \      return;\
   \    };\
