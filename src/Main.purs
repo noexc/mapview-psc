@@ -19,6 +19,8 @@ import GMaps.Marker
 import GMaps.MVCArray
 import GMaps.Polyline
 
+import MomentJS
+
 import WebSocket
 
 setDismissAnnouncement :: forall eff. Eff eff Unit
@@ -72,6 +74,10 @@ main = do
   socket <- newWebSocket "ws://echo.websocket.org/"
   addEventListenerWS socket "onmessage" updateMap
   sendWS socket "testing"
+
+  leet <- timeAgo "0678" "YYYY"
+  lastupdate <- getElementById "lastupdate"
+  setInnerHtml lastupdate leet
 
   trace "hi"
   where
