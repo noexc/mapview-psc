@@ -1,13 +1,11 @@
 module Main where
 
-import Data.Maybe
-
-import Debug.Trace
-
 import Control.Monad.Eff
-
+import Data.Either
+import Data.Foreign
+import Data.Maybe
+import Debug.Trace
 import DomHelpers
-
 import GMaps.InfoWindow
 import GMaps.LatLng
 import GMaps.Map
@@ -15,10 +13,8 @@ import GMaps.MapOptions
 import GMaps.Marker
 import GMaps.MVCArray
 import GMaps.Polyline
-
+import MapViewWS
 import MomentJS
---import MomentJS.At
-
 import WebSocket
 
 setDismissAnnouncement :: forall eff. Eff eff Unit
@@ -46,13 +42,13 @@ foreign import getData
 main = do
   setDismissAnnouncement
   mapE <- getElementById "map-canvas"
-  startingPoint <- newLatLng 0.0 0.0
+  startingPoint <- newLatLng 41.714754626155 (-73.726791873574)
   roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
-  randomcoord <- newLatLng (-34.397) 150.644
+  randomcoord <- newLatLng 41.714754626155 (-73.726791873574)
   panTo roadmap randomcoord
 
   mvcA <- newMVCArray :: forall eff. Eff eff (MVCArray LatLng)
-  testcoord <- newLatLng (-34.397) 151.644
+  testcoord <- newLatLng 41.714754626155 (-73.726791873574)
   pushMVCArray mvcA testcoord
   pushMVCArray mvcA randomcoord
 
@@ -80,6 +76,10 @@ main = do
   let seven = fromMaybe "Unknown" str
   setInnerHtml lastupdate seven
 
+  let example = "{\"coordinates\":{\"latitude\":41.714754626155,\"longitude\":-72.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
+  trace $ case parseJSON example of
+    Left err -> "Error parsing JSON:\n" ++ err
+    Right (LocationBeacon result) -> unsafeShowJSON result
 
   trace "hi"
   where

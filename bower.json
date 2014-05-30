@@ -16,6 +16,8 @@
     ],
     "dependencies": {
         "purescript-datetime": "*",
-        "purescript-control": "*"
+        "purescript-control": "*",
+        "purescript-either": "*",
+        "purescript-foreign": "*"
     }
 }
