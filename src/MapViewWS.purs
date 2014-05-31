@@ -2,9 +2,9 @@ module MapViewWS where
 
 import Data.Foreign
 
-data Coordinate = Coordinate { latitude :: Number
-                               , longitude :: Number
-                               }
+data Coordinate  = Coordinate { latitude :: Number
+                              , longitude :: Number
+                              }
 
 data WSMessage =
   LocationBeacon { coordinates :: Coordinate
@@ -15,8 +15,10 @@ data WSMessage =
 instance readCoordinate :: ReadForeign Coordinate where
   read = do
     lat <- prop "latitude"
-    lon <- prop "longitude"
-    return $ Coordinate { latitude: lat, longitude: lon }
+    long <- prop "longitude"
+    return $ Coordinate { latitude: lat
+                        , longitude: long
+                        }
 
 instance readWSMessage :: ReadForeign WSMessage where
   read = do

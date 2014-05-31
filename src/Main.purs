@@ -64,9 +64,10 @@ main = do
   iw <- newInfoWindow (InfoWindowOptions { content: "HABP Location" })
   openInfoWindow iw roadmap marker
 
+  let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
   socket <- newWebSocket "ws://echo.websocket.org/"
-  addEventListenerWS socket "onmessage" updateMap
-  sendWS socket "testing"
+  addEventListenerWS socket "onmessage" $ (\x -> updateMap x mvcA polyline marker)
+  sendWS socket example
 
   nowMoment <- now
   let leet = momentConstructor "January 1, 0678"
@@ -76,13 +77,17 @@ main = do
   let seven = fromMaybe "Unknown" str
   setInnerHtml lastupdate seven
 
-  let example = "{\"coordinates\":{\"latitude\":41.714754626155,\"longitude\":-72.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
-  trace $ case parseJSON example of
-    Left err -> "Error parsing JSON:\n" ++ err
-    Right (LocationBeacon result) -> unsafeShowJSON result
-
   trace "hi"
   where
-    updateMap e = do
+    updateMap e mvcA polyline marker = do
       msgData <- getData e
-      trace msgData
+      case parseJSON msgData of
+        Left err -> trace $ "Error parsing JSON:\n" ++ err
+        Right (LocationBeacon result) -> do
+          trace $ unsafeShowJSON result
+          case result.coordinates of
+            Coordinate coord -> do
+              latestLatLng <- newLatLng coord.latitude coord.longitude
+              pushMVCArray mvcA latestLatLng
+              setPolylinePath polyline mvcA
+              setMarkerPosition marker latestLatLng
