@@ -40,4 +40,4 @@ foreign import setMarkerPosition
   \      return marker.setPosition(latlng);\
   \    };\
   \  };\
-  \}" :: forall eff. Marker -> LatLng -> Eff eff {}
+  \}" :: forall eff. Marker -> LatLng -> Eff eff Unit

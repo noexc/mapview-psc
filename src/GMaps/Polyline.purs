@@ -51,4 +51,4 @@ foreign import setPolylinePath
   \      pl.setPath(arr);\
   \    };\
   \  };\
-  \}" :: forall eff. Polyline -> MVCArray LatLng -> Eff eff {}
+  \}" :: forall eff. Polyline -> MVCArray LatLng -> Eff eff Unit

@@ -3,6 +3,7 @@ module Main where
 import Control.Monad.Eff
 import Data.Either
 import Data.Foreign
+import Data.Foreign.Class
 import Data.Maybe
 import Debug.Trace
 import DomHelpers
@@ -64,10 +65,10 @@ main = do
   iw <- newInfoWindow (InfoWindowOptions { content: "HABP Location" })
   openInfoWindow iw roadmap marker
 
-  let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
-  socket <- newWebSocket "ws://echo.websocket.org/"
+  --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
+  socket <- newWebSocket "ws://127.0.0.1:9160/"
   addEventListenerWS socket "onmessage" $ (\x -> updateMap x mvcA polyline marker)
-  sendWS socket example
+  --sendWS socket example
 
   nowMoment <- now
   let leet = momentConstructor "January 1, 0678"
@@ -80,9 +81,10 @@ main = do
   trace "hi"
   where
     updateMap e mvcA polyline marker = do
+      trace "RX from websocket"
       msgData <- getData e
-      case parseJSON msgData of
-        Left err -> trace $ "Error parsing JSON:\n" ++ err
+      case readJSON msgData :: F WSMessage of
+        Left err -> trace $ "Error parsing JSON:\n" ++ show err
         Right (LocationBeacon result) -> do
           trace $ unsafeShowJSON result
           case result.coordinates of

@@ -35,4 +35,4 @@ foreign import openInfoWindow
   \      };\
   \    };\
   \  };\
-  \}" :: forall eff. InfoWindow -> Map -> Marker -> Eff eff {}
+  \}" :: forall eff. InfoWindow -> Map -> Marker -> Eff eff Unit

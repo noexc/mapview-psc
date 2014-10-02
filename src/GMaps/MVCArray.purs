@@ -20,7 +20,7 @@ foreign import pushMVCArray
   \      return;\
   \    };\
   \  };\
-  \}" :: forall a eff. MVCArray a -> a -> Eff eff {}
+  \}" :: forall a eff. MVCArray a -> a -> Eff eff Unit
 
 foreign import popMVCArray
   "function popMVCArray(arr) {\

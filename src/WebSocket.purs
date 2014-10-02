@@ -22,7 +22,7 @@ foreign import addEventListenerWS
   \      };\
   \    };\
   \  };\
-  \}" :: forall eff. WebSocket -> String -> (Event -> Eff eff {}) -> Eff eff {}
+  \}" :: forall eff. WebSocket -> String -> (Event -> Eff eff Unit) -> Eff eff Unit
 
 foreign import sendWS
   "function sendWS(ws) {\
@@ -38,4 +38,4 @@ foreign import sendWS
   \      return;\
   \    };\
   \  };\
-  \}" :: forall eff. WebSocket -> String -> Eff eff {}
+  \}" :: forall eff. WebSocket -> String -> Eff eff Unit
