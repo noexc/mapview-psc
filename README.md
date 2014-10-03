@@ -8,8 +8,8 @@ This is a rewrite of the Fay mapview code with PureScript.
 
 ```bash
 sudo yum install npm
-git clone git://github.com/w8upd/mapview-psc.git # Anonymous clone
-git clone git@github.com:w8upd/mapview-psc.git # Authorized clone
+git clone git://github.com/noexc/mapview-psc.git # Anonymous clone
+git clone git@github.com:noexc/mapview-psc.git # Authorized clone
 cd mapview-psc
 ```
 
