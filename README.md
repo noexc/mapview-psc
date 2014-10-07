@@ -1,5 +1,7 @@
 # mapview client in PureScript
 
+[![Build Status](https://travis-ci.org/noexc/mapview-psc.svg?branch=master)](https://travis-ci.org/noexc/mapview-psc)
+
 This is a rewrite of the Fay mapview code with PureScript.
 
 ## Installing
