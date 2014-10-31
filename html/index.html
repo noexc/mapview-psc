@@ -1,40 +1,86 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.4.2/pure-min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
       html, body, #map-canvas {
-        margin: 0;
-        padding: 0;
-        height: 100%;
+      margin: 0;
+      padding: 0;
+      height: 100%;
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
     <!--[if lt IE 9]>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
-    <![endif]-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+        <![endif]-->
   </head>
   <body>
-    <div class="header">
-      <div class="mv-menu pure-menu pure-menu-open pure-menu-horizontal">
-        <a class="pure-menu-heading" href="/">UA-HABP3 MapView</a>
-        <ul>
-          <li><a href="#">Last update: <span id="lastupdate">(no update yet)</span></a></li>
-        </ul>
+    <nav class="navbar navbar-default mv-navbar" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">HABP Mapview</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="collapse">
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Your Latitude">
+              <input type="text" class="form-control" placeholder="Your Longitude">
+              <input type="text" class="form-control" placeholder="Your elevation (ft)">
+            </div>
+          </form>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Last update: Unknown</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div id="announcement" class="yay">
+          <span id="announcement_text">
+            Welcome to mapview 2.0! Updates will appear here. Press <kbd>h</kbd> for info.
+          </span>
+          <button id="dismiss_announcement" class="button-secondary pure-button button-xsmall">Close</button>
+        </div>
       </div>
     </div>
-    <div id="announcement" class="yay">
-      <span id="announcement_text">
-        Welcome to mapview 2.0! Announcements will appear here in real-time.
-      </span>
-      <button id="dismiss_announcement" class="button-secondary pure-button button-xsmall">Close</button>
+
+    <div class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            <p>One fine body&hellip;</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
     </div>
+
     <div id="map-canvas"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="index.js"></script>
   </body>
 </html>
