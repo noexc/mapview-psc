@@ -4,6 +4,7 @@ import Control.Monad.Eff
 import Data.Maybe
 
 foreign import data JSMoment :: *
+foreign import data UTCMoment :: *
 foreign import data Now :: !
 
 -- Phantom type!
