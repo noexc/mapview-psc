@@ -1,7 +1,7 @@
 module GMaps.Map (Map (), gMap, panTo) where
 
 import Control.Monad.Eff
-import DomHelpers
+import Data.DOM.Simple.Types
 import GMaps.LatLng
 import GMaps.MapOptions
 
@@ -14,9 +14,9 @@ foreign import gMapFFI
   \      return (new google.maps.Map(ele, opts));\
   \    };\
   \  };\
-  \}" :: forall eff. Element -> { zoom :: Number, center :: LatLng, mapTypeId :: String } -> Eff eff Map
+  \}" :: forall eff. HTMLElement -> { zoom :: Number, center :: LatLng, mapTypeId :: String } -> Eff eff Map
 
-gMap :: forall eff. Element -> MapOptions -> Eff eff Map
+gMap :: forall eff. HTMLElement -> MapOptions -> Eff eff Map
 gMap e m = gMapFFI e (runMapOptions m)
 
 foreign import panTo

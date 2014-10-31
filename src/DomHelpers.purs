@@ -1,15 +1,7 @@
 module DomHelpers where
 
 import Control.Monad.Eff
-
-foreign import data Element :: *
-
-foreign import getElementById
-  "function getElementById(id) {\
-  \  return function() {\
-  \    return document.getElementById(id);\
-  \  };\
-  \}" :: forall eff. String -> Eff eff Element
+import Data.DOM.Simple.Types
 
 foreign import setOnclick
   "function setOnclick(ele) {\
@@ -19,7 +11,7 @@ foreign import setOnclick
   \      return;\
   \    };\
   \  };\
-  \}" :: forall eff a. Element -> (a -> Unit) -> Eff eff Unit
+  \}" :: forall eff a. HTMLElement -> (a -> Unit) -> Eff eff Unit
 
 foreign import setDisplayFn
   "function setDisplayFn(ele) {\
@@ -31,7 +23,7 @@ foreign import setDisplayFn
   \      };\
   \    };\
   \  };\
-  \}" :: forall eff. Element -> String -> Eff eff (Unit -> Unit)
+  \}" :: forall eff. HTMLElement -> String -> Eff eff (Unit -> Unit)
 
 foreign import setDisplay
   "function setDisplay(ele) {\
@@ -41,7 +33,7 @@ foreign import setDisplay
   \      return;\
   \    };\
   \  };\
-  \}" :: forall eff. Element -> String -> Eff eff Unit
+  \}" :: forall eff. HTMLElement -> String -> Eff eff Unit
 
 foreign import setInnerHtml
   "function setInnerHtml(ele) {\
@@ -51,7 +43,7 @@ foreign import setInnerHtml
   \      return;\
   \    };\
   \  };\
-  \}" :: forall eff. Element -> String -> Eff eff (Unit -> Unit)
+  \}" :: forall eff. HTMLElement -> String -> Eff eff (Unit -> Unit)
 
 foreign import setClass
   "function setClass(ele) {\
@@ -61,4 +53,4 @@ foreign import setClass
   \      return;\
   \    };\
   \  };\
-  \}" :: forall eff. Element -> String -> Eff eff (Unit -> Unit)
+  \}" :: forall eff. HTMLElement -> String -> Eff eff (Unit -> Unit)

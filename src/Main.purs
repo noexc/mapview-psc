@@ -1,6 +1,13 @@
 module Main where
 
 import Control.Monad.Eff
+import Data.DOM.Simple.Ajax
+import Data.DOM.Simple.Document
+import Data.DOM.Simple.Element
+import Data.DOM.Simple.Encode
+import Data.DOM.Simple.Events hiding (read)
+import Data.DOM.Simple.Types
+import Data.DOM.Simple.Window
 import Data.Either
 import Data.Foreign
 import Data.Foreign.Class
@@ -18,17 +25,19 @@ import MapViewWS
 import MomentJS
 import WebSocket
 
-setDismissAnnouncement :: forall eff. Eff eff Unit
-setDismissAnnouncement = do
-  dismissButton <- getElementById "dismiss_announcement"
-  announcement <- getElementById "announcement"
+setDismissAnnouncement :: forall eff. HTMLDocument -> Eff (dom :: DOM | eff) Unit
+setDismissAnnouncement doc = do
+  -- TODO: Partial
+  Just dismissButton <- getElementById "dismiss_announcement" doc
+  Just announcement <- getElementById "announcement" doc
   y <- setDisplayFn announcement "none"
   setOnclick dismissButton y
 
-setAnnouncement :: forall eff. String -> String -> Eff eff Unit
-setAnnouncement t c = do
-  announcement <- getElementById "announcement"
-  text <- getElementById "announcement_text"
+setAnnouncement :: forall eff. HTMLDocument -> String -> String -> Eff (dom :: DOM | eff) Unit
+setAnnouncement doc t c = do
+  -- TODO: Partial
+  Just announcement <- getElementById "announcement" doc
+  Just text <- getElementById "announcement_text" doc
   setInnerHtml text t
   setClass announcement c
   setDisplay announcement "block"
@@ -41,8 +50,9 @@ foreign import getData
   \}" :: forall eff. Event -> Eff eff String
 
 main = do
-  setDismissAnnouncement
-  mapE <- getElementById "map-canvas"
+  doc <- document globalWindow
+  setDismissAnnouncement doc
+  Just mapE <- getElementById "map-canvas" doc
   startingPoint <- newLatLng 41.714754626155 (-73.726791873574)
   roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
   randomcoord <- newLatLng 41.714754626155 (-73.726791873574)
@@ -73,7 +83,7 @@ main = do
   nowMoment <- now
   let leet = momentConstructor "January 1, 0678"
   let leet' = createMoment leet
-  lastupdate <- getElementById "lastupdate"
+  Just lastupdate <- getElementById "lastupdate" doc
   let str = liftMoment2 momentFrom nowMoment <$> leet'
   let seven = fromMaybe "Unknown" str
   setInnerHtml lastupdate seven
