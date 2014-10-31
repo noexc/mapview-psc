@@ -24,7 +24,7 @@ foreign import momentConstructor
 foreign import utcNow
   "function utcNow() {\
   \  return UTCMoment(moment.utc());\
-  \}" :: forall e. Eff (now :: Now | e) (Moment JSMoment)
+  \}" :: forall e. Eff (now :: Now | e) (Moment UTCMoment)
 
 foreign import utcMomentConstructor
   "function utcMomentConstructor(s) {\
