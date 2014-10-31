@@ -12,7 +12,7 @@ data Moment a = Moment JSMoment | UTCMoment JSMoment
 
 foreign import now
   "function now() {\
-  \  return Moment(moment());\
+  \  return Moment.create(moment());\
   \}" :: forall e. Eff (now :: Now | e) (Moment JSMoment)
 
 foreign import momentConstructor
@@ -24,7 +24,7 @@ foreign import momentConstructor
 
 foreign import utcNow
   "function utcNow() {\
-  \  return UTCMoment(moment.utc());\
+  \  return UTCMoment.create(moment.utc());\
   \}" :: forall e. Eff (now :: Now | e) (Moment UTCMoment)
 
 foreign import utcMomentConstructor
