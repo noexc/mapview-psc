@@ -13,7 +13,7 @@ import Data.Foreign
 import Data.Foreign.Class
 import Data.Maybe
 import Debug.Trace
-import DomHelpers
+import DomHelpers hiding (setInnerHtml)
 import GMaps.InfoWindow
 import GMaps.LatLng
 import GMaps.Map
@@ -38,7 +38,7 @@ setAnnouncement doc t c = do
   -- TODO: Partial
   Just announcement <- getElementById "announcement" doc
   Just text <- getElementById "announcement_text" doc
-  setInnerHtml text t
+  setInnerHTML t text
   setClass announcement c
   setDisplay announcement "block"
 
@@ -86,7 +86,7 @@ main = do
   Just lastupdate <- getElementById "lastupdate" doc
   let str = liftMoment2 momentFrom nowMoment <$> leet'
   let seven = fromMaybe "Unknown" str
-  setInnerHtml lastupdate seven
+  setInnerHTML seven lastupdate
 
   trace "hi"
   where
