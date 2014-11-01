@@ -1,24 +1,27 @@
 {
-    "name": "habp-mapview",
-    "version": "0.0.1",
-    "homepage": "https://github.com/w8upd/mapview",
-    "authors": [
-        "Ricky Elrod <ricky@elrod.me>"
-    ],
-    "license": "MIT",
-    "private": true,
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "purescript-datetime": "*",
-        "purescript-control": "*",
-        "purescript-either": "*",
-        "purescript-foreign": "*",
-        "purescript-simple-dom": "aktowns/purescript-simple-dom"
-    }
+  "name": "habp-mapview",
+  "version": "0.0.1",
+  "homepage": "https://github.com/w8upd/mapview",
+  "authors": [
+    "Ricky Elrod <ricky@elrod.me>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "purescript-datetime": "*",
+    "purescript-control": "*",
+    "purescript-either": "*",
+    "purescript-foreign": "*",
+    "purescript-simple-dom": "aktowns/purescript-simple-dom"
+  },
+  "resolutions": {
+    "purescript-strings": "0.4.0"
+  }
 }
