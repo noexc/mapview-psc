@@ -13,7 +13,7 @@ import Data.Foreign
 import Data.Foreign.Class
 import Data.Maybe
 import Debug.Trace
-import DomHelpers hiding (setInnerHtml)
+import DomHelpers
 import GMaps.InfoWindow
 import GMaps.LatLng
 import GMaps.Map
