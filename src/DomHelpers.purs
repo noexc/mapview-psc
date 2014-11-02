@@ -35,16 +35,6 @@ foreign import setDisplay
   \  };\
   \}" :: forall eff. HTMLElement -> String -> Eff eff Unit
 
-foreign import setInnerHtml
-  "function setInnerHtml(ele) {\
-  \  return function(s) {\
-  \    return function() {\
-  \      ele.innerHTML = s;\
-  \      return;\
-  \    };\
-  \  };\
-  \}" :: forall eff. HTMLElement -> String -> Eff eff (Unit -> Unit)
-
 foreign import setClass
   "function setClass(ele) {\
   \  return function(s) {\
