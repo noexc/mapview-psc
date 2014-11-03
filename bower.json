@@ -18,6 +18,7 @@
     "purescript-datetime": "*",
     "purescript-control": "*",
     "purescript-either": "*",
+    "purescript-foldable-traversable": "*",
     "purescript-foreign": "*",
     "purescript-simple-dom": "aktowns/purescript-simple-dom"
   },

@@ -9,6 +9,7 @@ import Data.DOM.Simple.Events hiding (read)
 import Data.DOM.Simple.Types
 import Data.DOM.Simple.Window
 import Data.Either
+import Data.Foldable (traverse_)
 import Data.Foreign
 import Data.Foreign.Class
 import Data.Maybe
@@ -55,13 +56,14 @@ main = do
   Just mapE <- getElementById "map-canvas" doc
   startingPoint <- newLatLng 41.714754626155 (-73.726791873574)
   roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
-  randomcoord <- newLatLng 41.714754626155 (-73.726791873574)
-  panTo roadmap randomcoord
-
   mvcA <- newMVCArray :: forall eff. Eff eff (MVCArray LatLng)
-  testcoord <- newLatLng 41.714754626155 (-73.726791873574)
-  pushMVCArray mvcA testcoord
-  pushMVCArray mvcA randomcoord
+
+  -- Various bits of test data to play with.
+  --randomcoord <- newLatLng 41.714754626155 (-73.726791873574)
+  --panTo roadmap randomcoord
+  --testcoord <- newLatLng 41.714754626155 (-73.726791873574)
+  --pushMVCArray mvcA testcoord
+  --pushMVCArray mvcA randomcoord
 
   polyline <- newPolyline (PolylineOptions { geodescic: true
                                            , strokeColor: "#ff0000"
@@ -71,9 +73,11 @@ main = do
                                            })
   setPolylinePath polyline mvcA
 
-  marker <- newMarker (MarkerOptions { position: randomcoord, map: roadmap, title: "HABP Location" })
-  iw <- newInfoWindow (InfoWindowOptions { content: "HABP Location" })
-  openInfoWindow iw roadmap marker
+  marker <- newMarker (MarkerOptions { position: startingPoint, map: roadmap, title: "HABP Location" })
+
+  -- TODO: info window.
+  --iw <- newInfoWindow (InfoWindowOptions { content: "HABP Location" })
+  --openInfoWindow iw roadmap marker
 
   --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
   socket <- newWebSocket "ws://127.0.0.1:9160/"
@@ -88,18 +92,23 @@ main = do
   let seven = fromMaybe "Unknown" str
   setInnerHTML seven lastupdate
 
-  trace "hi"
   where
     updateMap e mvcA polyline marker = do
-      trace "RX from websocket"
+      --trace "RX from websocket"
       msgData <- getData e
+      --trace msgData
       case readJSON msgData :: F WSMessage of
         Left err -> trace $ "Error parsing JSON:\n" ++ show err
         Right (LocationBeacon result) -> do
-          trace $ unsafeShowJSON result
-          case result.coordinates of
-            Coordinate coord -> do
-              latestLatLng <- newLatLng coord.latitude coord.longitude
-              pushMVCArray mvcA latestLatLng
-              setPolylinePath polyline mvcA
-              setMarkerPosition marker latestLatLng
+          --trace $ unsafeShowJSON result
+          addToPath mvcA polyline marker result.coordinates
+        Right (BeaconHistory coordinates) -> do
+          --trace $ unsafeShowJSON coordinates
+          traverse_ (addToPath mvcA polyline marker) coordinates
+
+addToPath :: forall eff. (MVCArray LatLng) -> Polyline -> Marker -> Coordinate -> Eff eff Unit
+addToPath mvcA polyline marker (Coordinate c) = do
+  latestLatLng <- newLatLng c.latitude c.longitude
+  pushMVCArray mvcA latestLatLng
+  setPolylinePath polyline mvcA
+  setMarkerPosition marker latestLatLng
