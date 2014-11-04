@@ -20,6 +20,7 @@
     "purescript-either": "*",
     "purescript-foldable-traversable": "*",
     "purescript-foreign": "*",
+    "purescript-math": "*",
     "purescript-simple-dom": "aktowns/purescript-simple-dom"
   },
   "resolutions": {
