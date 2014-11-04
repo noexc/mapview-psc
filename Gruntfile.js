@@ -28,6 +28,14 @@ module.exports = function(grunt) {
       }
     },
 
+
+    docgen: {
+      readme: {
+        src: "src/**/*.purs",
+        dest: "API.md"
+      }
+    },
+
     copy: {
       main: {
         files: [
