@@ -81,7 +81,7 @@ main = do
 
   --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
   socket <- newWebSocket "ws://127.0.0.1:9160/"
-  addEventListenerWS socket "onmessage" $ (\x -> updateMap x mvcA polyline marker)
+  addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker)
   --sendWS socket example
 
   nowMoment <- now
@@ -93,7 +93,7 @@ main = do
   setInnerHTML seven lastupdate
 
   where
-    updateMap e mvcA polyline marker = do
+    handleEvent e mvcA polyline marker = do
       --trace "RX from websocket"
       msgData <- getData e
       --trace msgData
