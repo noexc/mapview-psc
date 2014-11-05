@@ -167,6 +167,8 @@
 
     setDismissAnnouncement :: forall eff. HTMLDocument -> Eff (dom :: DOM | eff) Unit
 
+    updateLookangle :: forall eff a. { altitude :: Number, coordinates :: Coordinate | a } -> Eff (trace :: Debug.Trace.Trace, dom :: DOM | eff) Unit
+
 
 ## Module MapViewWS
 
