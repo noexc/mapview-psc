@@ -22,6 +22,7 @@ import GMaps.MapOptions
 import GMaps.Marker
 import GMaps.MVCArray
 import GMaps.Polyline
+import qualified Lookangle as L
 import MapViewWS
 import MomentJS
 import WebSocket
@@ -102,6 +103,7 @@ main = do
         Right (LocationBeacon result) -> do
           --trace $ unsafeShowJSON result
           addToPath mvcA polyline marker result.coordinates
+          updateLookangle result
         Right (BeaconHistory coordinates) -> do
           --trace $ unsafeShowJSON coordinates
           traverse_ (addToPath mvcA polyline marker) coordinates
@@ -112,3 +114,11 @@ addToPath mvcA polyline marker (Coordinate c) = do
   pushMVCArray mvcA latestLatLng
   setPolylinePath polyline mvcA
   setMarkerPosition marker latestLatLng
+
+updateLookangle :: forall eff a. { coordinates :: Coordinate, altitude :: Number | a } -> Eff (dom :: DOM, trace :: Debug.Trace.Trace | eff) Unit
+updateLookangle packet = do
+  doc <- document globalWindow
+  Just lookangle <- getElementById "lookangle" doc
+  -- TODO: Actually calculate the look angle using L.lookAngle
+  setInnerHTML "boo!" lookangle
+  trace $ show packet.altitude
