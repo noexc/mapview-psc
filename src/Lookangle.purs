@@ -6,7 +6,13 @@ type Latitude  = Number
 type Longitude = Number
 type Altitude  = Number
 data Coordinate = Coordinate Latitude Longitude Altitude
-data AzElCord   = AzelCord { azimuth :: Number, elevation :: Number, range :: Number }
+data AzElCord   = AzElCord { azimuth :: Number, elevation :: Number, range :: Number }
+
+instance showCoordinate :: Show Coordinate where
+  show (Coordinate lat lon alt) = "Coordinate " ++ show lat ++ " " ++ show lon ++ " " ++ show alt
+
+instance showAzElCord :: Show AzElCord where
+  show (AzElCord a) = show a.azimuth ++ ", " ++ show a.elevation ++ ", " ++ show a.range
 
 -- | Given a source and destination coordinate, return the look angle and
 -- range to the object.
@@ -15,7 +21,7 @@ lookAngle ::
   -> Coordinate -- ^ Destination coordinate
   -> AzElCord
 lookAngle (Coordinate gLat gLon gAlt) (Coordinate pLat pLon pAlt) =
-  AzelCord {
+  AzElCord {
     azimuth: azimuth',
     elevation: elevation',
     range: range'

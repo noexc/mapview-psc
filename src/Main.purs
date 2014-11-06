@@ -22,6 +22,7 @@ import GMaps.MapOptions
 import GMaps.Marker
 import GMaps.MVCArray
 import GMaps.Polyline
+import Global
 import qualified Lookangle as L
 import MapViewWS
 import MomentJS
@@ -103,22 +104,40 @@ main = do
         Right (LocationBeacon result) -> do
           --trace $ unsafeShowJSON result
           addToPath mvcA polyline marker result.coordinates
-          updateLookangle result
+          updateLookangle result.coordinates result.altitude
         Right (BeaconHistory coordinates) -> do
           --trace $ unsafeShowJSON coordinates
           traverse_ (addToPath mvcA polyline marker) coordinates
 
-addToPath :: forall eff. (MVCArray LatLng) -> Polyline -> Marker -> Coordinate -> Eff eff Unit
+addToPath ::
+  forall eff.
+  MVCArray LatLng
+  -> Polyline
+  -> Marker
+  -> Coordinate
+  -> Eff eff Unit
 addToPath mvcA polyline marker (Coordinate c) = do
   latestLatLng <- newLatLng c.latitude c.longitude
   pushMVCArray mvcA latestLatLng
   setPolylinePath polyline mvcA
   setMarkerPosition marker latestLatLng
 
-updateLookangle :: forall eff a. { coordinates :: Coordinate, altitude :: Number | a } -> Eff (dom :: DOM, trace :: Debug.Trace.Trace | eff) Unit
-updateLookangle packet = do
+updateLookangle ::
+  forall eff a.
+  Coordinate
+  -> Number
+  -> Eff (dom :: DOM, trace :: Debug.Trace.Trace | eff) Unit
+updateLookangle (Coordinate c) altitude = do
   doc <- document globalWindow
   Just lookangle <- getElementById "lookangle" doc
-  -- TODO: Actually calculate the look angle using L.lookAngle
-  setInnerHTML "boo!" lookangle
-  trace $ show packet.altitude
+  Just fLat' <- getElementById "f_lat" doc
+  Just fLon' <- getElementById "f_lon" doc
+  Just fAlt' <- getElementById "f_lon" doc
+  fLat <- readFloat <$> value fLat'
+  fLon <- readFloat <$> value fLon'
+  fAlt <- readFloat <$> value fAlt'
+  let angle =
+        L.lookAngle
+        (L.Coordinate fLat fLon fAlt)
+        (L.Coordinate c.latitude c.longitude altitude)
+  setInnerHTML (show angle) lookangle
