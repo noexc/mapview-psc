@@ -21,9 +21,9 @@
     "purescript-foldable-traversable": "*",
     "purescript-foreign": "*",
     "purescript-math": "*",
-    "purescript-simple-dom": "aktowns/purescript-simple-dom"
+    "purescript-simple-dom": "relrod/purescript-simple-dom"
   },
   "resolutions": {
-    "purescript-strings": "0.4.1"
+    "purescript-strings": "0.4.0"
   }
 }
