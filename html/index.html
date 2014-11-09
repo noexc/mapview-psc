@@ -7,10 +7,18 @@
     <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-      html, body, #map-canvas {
+      html, body, #map-canvas, .main {
       margin: 0;
       padding: 0;
       height: 100%;
+      }
+
+      .h100 { height: 100%; }
+      #map-canvas {
+        position: static !important;
+
+        /* Google Maps tries to be fancy to enable accel, but it adds an ugly padding in Chrome. */
+        -webkit-transform: none !important;
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
@@ -48,36 +56,52 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container-fluid">
-      <div class="row">
-        <div id="announcement" class="yay">
-          <span id="announcement_text">
-            Welcome to mapview 2.0! Updates will appear here. Press <kbd>h</kbd> for info.
-          </span>
-          <button id="dismiss_announcement" class="button-secondary pure-button button-xsmall">Close</button>
+    <div class="container-fluid h100">
+      <div class="row h100">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <h4>Maps</h4>
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#" onclick="showmap();">Google Map</a></li>
+          </ul>
+
+          <h4>Tools</h4>
+          <ul class="nav nav-sidebar">
+            <li><a href="#">Look Angle</a></li>
+            <li><a href="#">Another Thing</a></li>
+            <li><a href="#">And More</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 h100">
+          <div id="map-canvas"></div>
+          <!--<div id="announcement" class="yay">
+            <span id="announcement_text">
+              Welcome to mapview 2.0! Updates will appear here. Press <kbd>h</kbd> for info.
+            </span>
+            <button id="dismiss_announcement" class="button-secondary pure-button button-xsmall">Close</button>
+          </div>-->
+          <span id="announcement"></span>
+          <span id="dismiss_announcement"></span>
         </div>
       </div>
-    </div>
 
-    <div class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Modal title</h4>
-          </div>
-          <div class="modal-body">
-            <p>One fine body&hellip;</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
+      <div class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+              <p>One fine body&hellip;</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div>
     </div>
-
-    <div id="map-canvas"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.6.0/moment.min.js"></script>
