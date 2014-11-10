@@ -54,7 +54,7 @@ foreign import getData
 
 main = do
   doc <- document globalWindow
-  setDismissAnnouncement doc
+  --setDismissAnnouncement doc
   Just mapE <- getElementById "map-canvas" doc
   startingPoint <- newLatLng 41.714754626155 (-73.726791873574)
   roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
