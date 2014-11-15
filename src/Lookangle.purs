@@ -43,11 +43,11 @@ lookAngle (Coordinate gLat gLon gAlt) (Coordinate pLat pLon pAlt) =
     -- WGS84 -> ECR
     gX = (wgs84N + gAlt) * cos gLat' * cos gLon'
     gY = (wgs84N + gAlt) * cos gLat' * sin gLon'
-    gZ = (wgs84N * (pow (1 - wgs84Ecc) 2) + gAlt) * sin gLat'
+    gZ = (wgs84N * (1 - (pow wgs84Ecc 2)) + gAlt) * sin gLat'
 
     pX = (wgs84N + pAlt) * cos pLat' * cos pLon'
     pY = (wgs84N + pAlt) * cos pLat' * sin pLon'
-    pZ = (wgs84N * (pow (1 - wgs84Ecc) 2) + pAlt) * sin pLat'
+    pZ = (wgs84N * (1 - (pow wgs84Ecc 2)) + pAlt) * sin pLat'
 
     rangeX = pX - gX
     rangeY = pY - gY
