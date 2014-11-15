@@ -57,12 +57,11 @@ main = do
   --setDismissAnnouncement doc
   Just mapE <- getElementById "map-canvas" doc
   startingPoint <- newLatLng 41.714754626155 (-73.726791873574)
-  roadmap <- gMap mapE (MapOptions { zoom: 6, center: startingPoint, mapTypeId: "roadmap" })
+  roadmap <- gMap mapE (MapOptions { zoom: 10, center: startingPoint, mapTypeId: "roadmap" })
   mvcA <- newMVCArray :: forall eff. Eff eff (MVCArray LatLng)
 
   -- Various bits of test data to play with.
   --randomcoord <- newLatLng 41.714754626155 (-73.726791873574)
-  --panTo roadmap randomcoord
   --testcoord <- newLatLng 41.714754626155 (-73.726791873574)
   --pushMVCArray mvcA testcoord
   --pushMVCArray mvcA randomcoord
@@ -83,19 +82,11 @@ main = do
 
   --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
   socket <- newWebSocket "ws://127.0.0.1:9160/"
-  addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker)
+  addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker roadmap)
   --sendWS socket example
 
-  nowMoment <- now
-  let leet = momentConstructor "January 1, 0678"
-  let leet' = createMoment leet
-  Just lastupdate <- getElementById "lastupdate" doc
-  let str = liftMoment2 momentFrom nowMoment <$> leet'
-  let seven = fromMaybe "Unknown" str
-  setInnerHTML seven lastupdate
-
   where
-    handleEvent e mvcA polyline marker = do
+    handleEvent e mvcA polyline marker roadmap = do
       --trace "RX from websocket"
       msgData <- getData e
       --trace msgData
@@ -103,30 +94,56 @@ main = do
         Left err -> trace $ "Error parsing JSON:\n" ++ show err
         Right (LocationBeacon result) -> do
           --trace $ unsafeShowJSON result
-          addToPath mvcA polyline marker result.coordinates
+          addToPath mvcA polyline marker roadmap result.coordinates
           updateLookangle result.coordinates result.altitude
+          updateTimestamp result.time
+          updateTemperature result.temperature
         Right (BeaconHistory coordinates) -> do
           --trace $ unsafeShowJSON coordinates
-          traverse_ (addToPath mvcA polyline marker) coordinates
+          traverse_ (addToPath mvcA polyline marker roadmap) coordinates
+
+updateTemperature ::
+  forall eff.
+  Celsius
+  -> Eff (dom :: DOM | eff) Unit
+updateTemperature temp = do
+  doc <- document globalWindow
+  Just tempField <- getElementById "temperature" doc
+  setInnerHTML (show temp) tempField
+
+updateTimestamp ::
+  forall eff.
+  String
+  -> Eff (dom :: DOM, now :: MomentJS.Now | eff) Unit
+updateTimestamp time = do
+  doc <- document globalWindow
+  --nowMoment <- now
+  --let last = createMoment (momentConstructor time)
+  Just lastupdate <- getElementById "lastupdate" doc
+  --let str = liftMoment2 momentFrom nowMoment <$> last
+  --let humanReadableTime = fromMaybe "Unknown" str
+  setInnerHTML time lastupdate
 
 addToPath ::
   forall eff.
   MVCArray LatLng
   -> Polyline
   -> Marker
+  -> Map
   -> Coordinate
   -> Eff eff Unit
-addToPath mvcA polyline marker (Coordinate c) = do
+addToPath mvcA polyline marker roadmap (Coordinate c) = do
   latestLatLng <- newLatLng c.latitude c.longitude
   pushMVCArray mvcA latestLatLng
   setPolylinePath polyline mvcA
   setMarkerPosition marker latestLatLng
+  panTo roadmap latestLatLng
 
 updateLookangle ::
   forall eff a.
   Coordinate
   -> Number
-  -> Eff (dom :: DOM, trace :: Debug.Trace.Trace | eff) Unit
+  -> Eff (dom :: DOM | eff) Unit
 updateLookangle (Coordinate c) altitude = do
   doc <- document globalWindow
   Just lookangle <- getElementById "lookangle" doc
