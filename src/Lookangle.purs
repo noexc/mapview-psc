@@ -1,5 +1,6 @@
 module Lookangle where
 
+import Data.String
 import Math
 
 type Latitude  = Number
@@ -12,7 +13,7 @@ instance showCoordinate :: Show Coordinate where
   show (Coordinate lat lon alt) = "Coordinate " ++ show lat ++ " " ++ show lon ++ " " ++ show alt
 
 instance showAzElCord :: Show AzElCord where
-  show (AzElCord a) = show a.azimuth ++ ", " ++ show a.elevation ++ ", " ++ show a.range
+  show (AzElCord a) = "Az: " ++ take 6 (show a.azimuth) ++ "°, El: " ++ take 6 (show a.elevation) ++ "°, Rng: " ++ take 6 (show a.range) ++ "m"
 
 -- | Given a source and destination coordinate, return the look angle and
 -- range to the object.
