@@ -64,11 +64,15 @@ lookAngle (Coordinate gLat gLon gAlt) (Coordinate pLat pLon pAlt) =
              then pi / 2
              else asin (rotZ / range')
 
-    azRad = if rotS > 0
-            then atan (-(rotE / rotS)) + pi
-            else if rotS < 0
-                 then atan (-(rotE / rotS)) + (2 * pi)
-                 else pi / 2
+    azRad' = (if rotS == 0
+             then pi / 2
+             else atan (-(rotE / rotS))) + (if rotS > 0
+                                            then pi
+                                            else 0)
+
+    azRad = azRad' + if azRad' < 0
+                     then (2 * pi)
+                     else 0
 
     elevation' = elRad * (180 / pi)
     azimuth'   = azRad * (180 / pi)
