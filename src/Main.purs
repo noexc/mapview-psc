@@ -132,12 +132,11 @@ updateLookangle (Coordinate c) altitude = do
   Just lookangle <- getElementById "lookangle" doc
   Just fLat' <- getElementById "f_lat" doc
   Just fLon' <- getElementById "f_lon" doc
-  Just fAlt' <- getElementById "f_lon" doc
+  Just fAlt' <- getElementById "f_alt" doc
   fLat <- readFloat <$> value fLat'
   fLon <- readFloat <$> value fLon'
   fAlt <- readFloat <$> value fAlt'
-  let angle =
-        L.lookAngle
-        (L.Coordinate fLat fLon fAlt)
-        (L.Coordinate c.latitude c.longitude altitude)
+  let angle = L.lookAngle
+              (L.Coordinate fLat fLon fAlt)
+              (L.Coordinate c.latitude c.longitude altitude)
   setInnerHTML (show angle) lookangle
