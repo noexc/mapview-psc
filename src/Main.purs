@@ -56,7 +56,7 @@ main = do
   doc <- document globalWindow
   --setDismissAnnouncement doc
   Just mapE <- getElementById "map-canvas" doc
-  startingPoint <- newLatLng 41.714754626155 (-73.726791873574)
+  startingPoint <- newLatLng 40.371975 (-83.060578)
   roadmap <- gMap mapE (MapOptions { zoom: 10, center: startingPoint, mapTypeId: "roadmap" })
   mvcA <- newMVCArray :: forall eff. Eff eff (MVCArray LatLng)
 
