@@ -29,11 +29,6 @@ instance readCoordinate :: IsForeign Coordinate where
                         , longitude: long
                         }
 
-instance readCelsius :: IsForeign Celsius where
-  read value = do
-    celsius <- readProp "temperature" value
-    return $ Celsius celsius
-
 instance readWSMessage :: IsForeign WSMessage where
   read value =
     if isArray value
@@ -44,7 +39,7 @@ instance readWSMessage :: IsForeign WSMessage where
         coord <- readProp "coordinates" value
         altitude <- readProp "altitude" value
         time <- readProp "time" value
-        temperature <- readProp "temperature" value
+        temperature <- Celsius <$> readProp "temperature" value
         return $ LocationBeacon { coordinates: coord
                                 , altitude: altitude
                                 , time: time
