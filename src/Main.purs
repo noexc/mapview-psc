@@ -81,7 +81,7 @@ main = do
   --openInfoWindow iw roadmap marker
 
   --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
-  socket <- newWebSocket "ws://127.0.0.1:9160/"
+  socket <- newWebSocket "ws://mv-ws1.noexc.org:9160/"
   addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker roadmap)
   --sendWS socket example
 
