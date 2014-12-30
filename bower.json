@@ -22,5 +22,8 @@
     "purescript-foreign": "*",
     "purescript-math": "*",
     "purescript-simple-dom": "relrod/purescript-simple-dom"
+  },
+  "resolutions": {
+    "purescript-arrays": "~0.3.0"
   }
 }
