@@ -20,8 +20,9 @@
     "purescript-either": "*",
     "purescript-foldable-traversable": "*",
     "purescript-foreign": "*",
+    "purescript-leaflet": "git://github.com/relrod/purescript-leaflet.git#polyline",
     "purescript-math": "*",
-    "purescript-simple-dom": "relrod/purescript-simple-dom"
+    "purescript-simple-dom": "git://github.com/aktowns/purescript-simple-dom.git"
   },
   "resolutions": {
     "purescript-arrays": "~0.3.0"
