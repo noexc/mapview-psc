@@ -20,6 +20,7 @@
     "purescript-either": "*",
     "purescript-foldable-traversable": "*",
     "purescript-foreign": "*",
+    "purescript-googlemaps": "relrod/purescript-googlemaps",
     "purescript-leaflet": "git://github.com/relrod/purescript-leaflet.git#polyline",
     "purescript-math": "*",
     "purescript-simple-dom": "git://github.com/aktowns/purescript-simple-dom.git"
