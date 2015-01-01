@@ -20,6 +20,7 @@
     "purescript-either": "*",
     "purescript-foldable-traversable": "*",
     "purescript-foreign": "*",
+    "purescript-googlemaps": "relrod/purescript-googlemaps",
     "purescript-math": "*",
     "purescript-simple-dom": "relrod/purescript-simple-dom"
   },
