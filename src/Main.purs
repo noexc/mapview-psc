@@ -114,7 +114,9 @@ main = do
       msgData <- getData e
       --trace msgData
       case readJSON msgData :: F WSMessage of
-        Left err -> trace $ "Error parsing JSON:\n" ++ show err
+        Left err -> do
+          trace $ "Error parsing JSON: " ++ show err ++ "\n"
+          trace $ "Received data was: " ++ show msgData
         Right (LocationBeacon result) -> do
           --trace $ unsafeShowJSON result
           --addToPath polyline marker roadmap result.coordinates
