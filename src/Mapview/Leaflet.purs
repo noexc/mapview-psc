@@ -1,4 +1,4 @@
-module MapViewLeaflet where
+module MapView.Leaflet where
 
 import Control.Monad.Eff
 import Data.DOM.Simple.Ajax
@@ -14,7 +14,7 @@ import Data.Foreign
 import Data.Foreign.Class
 import Data.Maybe
 import Debug.Trace
-import DomHelpers
+import MapView.DomHelpers
 import Global
 import Leaflet.LatLng
 import Leaflet.LatLngBounds
@@ -23,7 +23,7 @@ import Leaflet.Marker
 import Leaflet.Polyline
 import Leaflet.TileLayer
 import Leaflet.Types
-import MapViewWS
+import MapView.WSTypes
 
 streetMap = do
   tile <- tileLayer "http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.jpg"

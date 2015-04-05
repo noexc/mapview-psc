@@ -1,4 +1,4 @@
-module DomHelpers where
+module MapView.DomHelpers where
 
 import Control.Monad.Eff
 import Data.DOM.Simple.Types

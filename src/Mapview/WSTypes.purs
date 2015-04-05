@@ -1,4 +1,4 @@
-module MapViewWS where
+module MapView.WSTypes where
 
 import Data.Foreign
 import Data.Foreign.Class

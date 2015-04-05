@@ -1,4 +1,4 @@
-module WebSocket where
+module MapView.WebSocket where
 
 import Control.Monad.Eff
 

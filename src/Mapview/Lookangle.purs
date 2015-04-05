@@ -1,4 +1,4 @@
-module Lookangle where
+module MapView.Lookangle where
 
 import Data.String
 import Math

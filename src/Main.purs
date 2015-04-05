@@ -14,7 +14,11 @@ import Data.Foreign
 import Data.Foreign.Class
 import Data.Maybe
 import Debug.Trace
-import DomHelpers
+import MapView.DomHelpers
+import qualified MapView.Lookangle as L
+import MapView.Leaflet
+import MapView.WSTypes
+import MapView.WebSocket
 import GMaps.InfoWindow
 import GMaps.LatLng
 import GMaps.Map
@@ -23,11 +27,7 @@ import GMaps.Marker
 import GMaps.MVCArray
 import GMaps.Polyline
 import Global
-import qualified Lookangle as L
-import MapViewLeaflet
-import MapViewWS
 import MomentJS
-import WebSocket
 
 setDismissAnnouncement :: forall eff. HTMLDocument -> Eff (dom :: DOM | eff) Unit
 setDismissAnnouncement doc = do
