@@ -52,10 +52,9 @@ foreign import getData
   \  };\
   \}" :: forall eff. Event -> Eff eff String
 
-
 streetMap = do
-  tile <- tileLayer "http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.jpg"
-          $ { subdomains: [ "otile1", "otile2", "otile3", "otile4" ] }
+  tile <- tileLayer "http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.jpg"
+          $ { subdomains: [ "1", "2", "3", "4" ] }
   return $ toILayer tile
 
 main = do
