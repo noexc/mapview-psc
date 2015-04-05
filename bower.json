@@ -22,7 +22,7 @@
     "purescript-foreign": "*",
     "purescript-googlemaps": "relrod/purescript-googlemaps",
     "purescript-math": "*",
-    "purescript-simple-dom": "relrod/purescript-simple-dom"
+    "purescript-simple-dom": "aktowns/purescript-simple-dom"
   },
   "resolutions": {
     "purescript-arrays": "~0.3.0"

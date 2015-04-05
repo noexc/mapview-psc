@@ -24,6 +24,7 @@ import GMaps.MVCArray
 import GMaps.Polyline
 import Global
 import qualified Lookangle as L
+import MapViewLeaflet
 import MapViewWS
 import MomentJS
 import WebSocket
