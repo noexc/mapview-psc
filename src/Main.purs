@@ -14,6 +14,7 @@ import Data.Foreign
 import Data.Foreign.Class
 import Data.Maybe
 import Debug.Trace
+import DOM
 import MapView.DomHelpers
 import qualified MapView.Lookangle as L
 import MapView.Leaflet
@@ -88,9 +89,9 @@ main = do
 
   where
     handleEvent e mvcA polyline marker roadmap = do
-      --trace "RX from websocket"
+      trace "RX from websocket"
       msgData <- getData e
-      --trace msgData
+      trace msgData
       case readJSON msgData :: F WSMessage of
         Left err -> trace $ "Error parsing JSON:\n" ++ show err
         Right (LocationBeacon result) -> do
