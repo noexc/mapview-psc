@@ -1,5 +1,7 @@
 module MapView.Lookangle where
 
+import Data.Foreign
+import Data.Foreign.Class
 import Data.String
 import Math
 
@@ -14,6 +16,13 @@ instance showCoordinate :: Show Coordinate where
 
 instance showAzElCord :: Show AzElCord where
   show (AzElCord a) = "Az: " ++ take 6 (show a.azimuth) ++ "°, El: " ++ take 6 (show a.elevation) ++ "°, Rng: " ++ take 6 (show a.range) ++ "m"
+
+instance readLookangleCoordinate :: IsForeign Coordinate where
+  read value = do
+    lat <- readProp "lat" value
+    lon <- readProp "lon" value
+    alt <- readProp "alt" value
+    return $ Coordinate lat lon alt
 
 -- | Given a source and destination coordinate, return the look angle and
 -- range to the object.

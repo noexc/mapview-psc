@@ -13,6 +13,7 @@ import Data.Foldable (traverse_)
 import Data.Foreign
 import Data.Foreign.Class
 import Data.Maybe
+import Data.String
 import Debug.Trace
 import DOM
 import MapView.DomHelpers
@@ -88,21 +89,36 @@ main = do
   --sendWS socket example
 
   where
+    -- This is in purescript-strings#master, but not in a release currently.
+    -- Interestingly, indexOf returns a 'Maybe Number' in master too.
+    contains x s = indexOf x s == -1
+
     handleEvent e mvcA polyline marker roadmap = do
-      trace "RX from websocket"
       msgData <- getData e
-      trace msgData
-      case readJSON msgData :: F WSMessage of
-        Left err -> trace $ "Error parsing JSON:\n" ++ show err
-        Right (LocationBeacon result) -> do
-          --trace $ unsafeShowJSON result
-          addToPath mvcA polyline marker roadmap result.coordinates
-          updateLookangle result.coordinates result.altitude
-          updateTimestamp result.time
-          updateTemperature result.temperature
-        Right (BeaconHistory coordinates) -> do
-          --trace $ unsafeShowJSON coordinates
-          traverse_ (addToPath mvcA polyline marker roadmap) coordinates
+      --trace $ "Got: " ++ msgData
+      if (msgData `contains` "local:")
+        then case readJSON (drop (length "local:") msgData) :: F L.Coordinate of
+               Left err -> trace $ "Error parsing JSON:\n" ++ show err
+               Right (L.Coordinate lat lon alt) -> do
+                 -- TODO: Fix partiality
+                 doc <- document globalWindow
+                 Just fLat' <- getElementById "f_lat" doc
+                 Just fLon' <- getElementById "f_lon" doc
+                 Just fAlt' <- getElementById "f_alt" doc
+                 setValue (show lat) fLat'
+                 setValue (show lon) fLon'
+                 setValue (show alt) fAlt'
+        else case readJSON msgData :: F WSMessage of
+               Left err -> trace $ "Error parsing JSON:\n" ++ show err
+               Right (LocationBeacon result) -> do
+                 --trace $ unsafeShowJSON result
+                 addToPath mvcA polyline marker roadmap result.coordinates
+                 updateLookangle result.coordinates result.altitude
+                 updateTimestamp result.time
+                 updateTemperature result.temperature
+               Right (BeaconHistory coordinates) -> do
+                 --trace $ unsafeShowJSON coordinates
+                 traverse_ (addToPath mvcA polyline marker roadmap) coordinates
 
 updateTemperature ::
   forall eff.
@@ -141,6 +157,7 @@ addToPath mvcA polyline marker roadmap (Coordinate c) = do
   setMarkerPosition marker latestLatLng
   panTo roadmap latestLatLng
 
+-- TODO: Fix partiality.
 updateLookangle ::
   forall eff a.
   Coordinate
