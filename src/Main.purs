@@ -1,5 +1,6 @@
 module Main where
 
+import Control.Monad (when)
 import Control.Monad.Eff
 import Data.DOM.Simple.Ajax
 import Data.DOM.Simple.Document
@@ -112,10 +113,13 @@ main = do
                Left err -> trace $ "Error parsing JSON:\n" ++ show err
                Right (LocationBeacon result) -> do
                  --trace $ unsafeShowJSON result
-                 addToPath mvcA polyline marker roadmap result.coordinates
-                 updateLookangle result.coordinates result.altitude
-                 updateTimestamp result.time
-                 updateTemperature result.temperature
+                 if isCRCMatch result.crc
+                   then do
+                     addToPath mvcA polyline marker roadmap result.coordinates
+                     updateLookangle result.coordinates result.altitude
+                     updateTimestamp result.time
+                     updateTemperature result.temperature
+                   else trace $ show result.crc
                Right (BeaconHistory coordinates) -> do
                  --trace $ unsafeShowJSON coordinates
                  traverse_ (addToPath mvcA polyline marker roadmap) coordinates
