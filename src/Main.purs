@@ -92,7 +92,7 @@ main = do
   where
     -- This is in purescript-strings#master, but not in a release currently.
     -- Interestingly, indexOf returns a 'Maybe Number' in master too.
-    contains x s = indexOf x s == -1
+    contains x s = indexOf s x /= -1
 
     handleEvent e mvcA polyline marker roadmap = do
       msgData <- getData e
@@ -110,7 +110,7 @@ main = do
                  setValue (show lon) fLon'
                  setValue (show alt) fAlt'
         else case readJSON msgData :: F WSMessage of
-               Left err -> trace $ "Error parsing JSON:\n" ++ show err
+               Left err -> trace $ "Error parsing JSON here:\n" ++ show err
                Right (LocationBeacon result) -> do
                  --trace $ unsafeShowJSON result
                  if isCRCMatch result.crc
@@ -118,7 +118,6 @@ main = do
                      addToPath mvcA polyline marker roadmap result.coordinates
                      updateLookangle result.coordinates result.altitude
                      updateTimestamp result.time
-                     updateTemperature result.temperature
                    else trace $ show result.crc
                Right (BeaconHistory coordinates) -> do
                  --trace $ unsafeShowJSON coordinates

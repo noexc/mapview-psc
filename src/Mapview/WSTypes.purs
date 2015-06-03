@@ -31,7 +31,6 @@ data WSMessage =
   LocationBeacon { coordinates :: Coordinate
                  , altitude :: Number
                  , time :: String
-                 , temperature :: Celsius
                  , crc :: CRCConfirmation
                  }
   | BeaconHistory [Coordinate]
@@ -67,11 +66,9 @@ instance readWSMessage :: IsForeign WSMessage where
         altitude <- readProp "altitude" value
         time <- readProp "time" value
         crc <- readProp "crc" value
-        temperature <- Celsius <$> readProp "temperature" value
         return $ LocationBeacon { coordinates: coord
                                 , altitude: altitude
                                 , time: time
-                                , temperature: temperature
                                 , crc: crc
                                 }
 
