@@ -24,6 +24,7 @@
     "purescript-googlemaps": "relrod/purescript-googlemaps",
     "purescript-leaflet": "dysinger/purescript-leaflet#master",
     "purescript-math": "*",
+    "purescript-refs": "*",
     "purescript-simple-dom": "aktowns/purescript-simple-dom"
   }
 }

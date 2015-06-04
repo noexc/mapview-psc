@@ -2,6 +2,7 @@ module Main where
 
 import Control.Monad (when)
 import Control.Monad.Eff
+import Control.Monad.Eff.Ref
 import Data.DOM.Simple.Ajax
 import Data.DOM.Simple.Document
 import Data.DOM.Simple.Element
@@ -57,6 +58,8 @@ foreign import getData
   \}" :: forall eff. Event -> Eff eff String
 
 main = do
+  lastReceivedPacket <- newRef Nothing
+
   doc <- document globalWindow
   --setDismissAnnouncement doc
   Just mapE <- getElementById "map-canvas" doc
@@ -87,7 +90,7 @@ main = do
 
   --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
   socket <- newWebSocket "ws://mv-ws1-b.elrod.me:9160/"
-  addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker gpsdMarker roadmap)
+  addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker gpsdMarker lastReceivedPacket roadmap)
   --sendWS socket example
 
   where
@@ -95,7 +98,7 @@ main = do
     -- Interestingly, indexOf returns a 'Maybe Number' in master too.
     contains x s = indexOf s x /= -1
 
-    handleEvent e mvcA polyline marker gpsdMarker roadmap = do
+    handleEvent e mvcA polyline marker gpsdMarker lastReceivedPacket roadmap = do
       msgData <- getData e
       --trace $ "Got: " ++ msgData
       if (msgData `contains` "local:")
@@ -111,15 +114,21 @@ main = do
                  setValue (show lon) fLon'
                  setValue (show alt) fAlt'
                  updateCarPosition gpsdMarker coord
+                 result <- readRef lastReceivedPacket
+                 case result of
+                   Just res -> updateLookangle res.coordinates res.altitude
+                   _ -> return unit
         else case readJSON msgData :: F WSMessage of
-               Left err -> trace $ "Error parsing JSON here:\n" ++ show err
+               Left err -> trace $ "Error parsing JSON:\n" ++ show err
                Right (LocationBeacon result) -> do
                  --trace $ unsafeShowJSON result
                  if isCRCMatch result.crc
                    then do
+                     writeRef lastReceivedPacket (Just result)
                      addToPath mvcA polyline marker roadmap result.coordinates
                      updateLookangle result.coordinates result.altitude
                      updateTimestamp result.time
+                     updateAltitude result.altitude
                    else trace $ show result.crc
                Right (BeaconHistory coordinates) -> do
                  --trace $ unsafeShowJSON coordinates
@@ -170,6 +179,16 @@ addToPath mvcA polyline marker roadmap (Coordinate c) = do
   setPolylinePath polyline mvcA
   setMarkerPosition marker latestLatLng
   panTo roadmap latestLatLng
+
+updateAltitude ::
+  forall eff.
+  Number
+  -> Eff (dom :: DOM | eff) Unit
+updateAltitude alt = do
+  doc <- document globalWindow
+  -- TODO: Partial
+  Just altField <- getElementById "balloon_altitude" doc
+  setInnerHTML (show alt) altField
 
 -- TODO: Fix partiality.
 updateLookangle ::
