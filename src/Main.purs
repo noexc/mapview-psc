@@ -78,7 +78,8 @@ main = do
                                            })
   setPolylinePath polyline mvcA
 
-  marker <- newMarker (MarkerOptions { position: startingPoint, map: roadmap, title: "HABP Location" })
+  marker <- newMarker (MarkerOptions { position: startingPoint, map: roadmap, title: "HABP Location", icon: Nothing })
+  gpsdMarker <- newMarker (MarkerOptions { position: startingPoint, map: roadmap, title: "Chase Car Location", icon: Just "images/car.png"  })
 
   -- TODO: info window.
   --iw <- newInfoWindow (InfoWindowOptions { content: "HABP Location" })
@@ -86,7 +87,7 @@ main = do
 
   --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
   socket <- newWebSocket "ws://mv-ws1-b.elrod.me:9160/"
-  addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker roadmap)
+  addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker gpsdMarker roadmap)
   --sendWS socket example
 
   where
@@ -94,13 +95,13 @@ main = do
     -- Interestingly, indexOf returns a 'Maybe Number' in master too.
     contains x s = indexOf s x /= -1
 
-    handleEvent e mvcA polyline marker roadmap = do
+    handleEvent e mvcA polyline marker gpsdMarker roadmap = do
       msgData <- getData e
       --trace $ "Got: " ++ msgData
       if (msgData `contains` "local:")
         then case readJSON (drop (length "local:") msgData) :: F L.Coordinate of
                Left err -> trace $ "Error parsing JSON:\n" ++ show err
-               Right (L.Coordinate lat lon alt) -> do
+               Right coord@(L.Coordinate lat lon alt) -> do
                  -- TODO: Fix partiality
                  doc <- document globalWindow
                  Just fLat' <- getElementById "f_lat" doc
@@ -109,6 +110,7 @@ main = do
                  setValue (show lat) fLat'
                  setValue (show lon) fLon'
                  setValue (show alt) fAlt'
+                 updateCarPosition gpsdMarker coord
         else case readJSON msgData :: F WSMessage of
                Left err -> trace $ "Error parsing JSON here:\n" ++ show err
                Right (LocationBeacon result) -> do
@@ -122,6 +124,15 @@ main = do
                Right (BeaconHistory coordinates) -> do
                  --trace $ unsafeShowJSON coordinates
                  traverse_ (addToPath mvcA polyline marker roadmap) coordinates
+
+updateCarPosition ::
+  forall eff.
+  Marker
+  -> L.Coordinate
+  -> Eff eff Unit
+updateCarPosition marker (L.Coordinate lat lon _) = do
+  latlon <- newLatLng lat lon
+  setMarkerPosition marker latlon
 
 updateTemperature ::
   forall eff.
