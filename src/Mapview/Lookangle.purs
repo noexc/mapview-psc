@@ -15,7 +15,7 @@ instance showCoordinate :: Show Coordinate where
   show (Coordinate lat lon alt) = "Coordinate " ++ show lat ++ " " ++ show lon ++ " " ++ show alt
 
 instance showAzElCord :: Show AzElCord where
-  show (AzElCord a) = "Az: " ++ take 6 (show a.azimuth) ++ "°, El: " ++ take 6 (show a.elevation) ++ "°, Rng: " ++ take 6 (show a.range) ++ "m"
+  show (AzElCord a) = "Az: " ++ take 6 (show a.azimuth) ++ "°, El: " ++ take 6 (show a.elevation) ++ "°, Rng: " ++ take 6 (show $ round $ a.range) ++ "m"
 
 instance readLookangleCoordinate :: IsForeign Coordinate where
   read value = do

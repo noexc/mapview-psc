@@ -15,16 +15,32 @@
     "tests"
   ],
   "dependencies": {
-    "purescript-datetime": "*",
-    "purescript-control": "*",
-    "purescript-dom": "*",
-    "purescript-either": "*",
-    "purescript-foldable-traversable": "*",
-    "purescript-foreign": "*",
+    "purescript-control": "0.2.6",
+    "purescript-datetime": "0.5.3",
+    "purescript-either": "0.1.8",
+    "purescript-foldable-traversable": "0.3.1",
+    "purescript-foreign": "0.4.2",
     "purescript-googlemaps": "relrod/purescript-googlemaps",
-    "purescript-leaflet": "dysinger/purescript-leaflet#master",
-    "purescript-math": "*",
-    "purescript-refs": "*",
-    "purescript-simple-dom": "aktowns/purescript-simple-dom"
+    "purescript-math": "0.1.1",
+    "purescript-refs": "0.1.3",
+    "purescript-simple-dom": "relrod/purescript-simple-dom",
+    "purescript-tailrec": "0.2.2"
+  },
+  "resolutions": {
+    "purescript-either": "0.1.8",
+    "purescript-control": "0.2.6",
+    "purescript-math": "0.1.1",
+    "purescript-foldable-traversable": "0.3.1",
+    "purescript-foreign": "0.4.2",
+    "purescript-tuples": "~0.3.0",
+    "purescript-maybe": "~0.2.1",
+    "purescript-monoid": "~0.2.0",
+    "purescript-datetime": "0.5.3",
+    "purescript-enums": "~0.4.0",
+    "purescript-strings": "~0.4.2",
+    "purescript-globals": "~0.1.5",
+    "purescript-unfoldable": "~0.3.0",
+    "purescript-tailrec": "0.2.2",
+    "purescript-identity": "~0.3.0"
   }
 }

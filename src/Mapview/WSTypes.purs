@@ -13,25 +13,11 @@ newtype Celsius = Celsius Number
 instance showCelsius :: Show Celsius where
   show (Celsius c) = show c ++ "°C"
 
-newtype TelemetryCRC = TelemetryCRC Number
-newtype CalculatedCRC = CalculatedCRC Number
-data CRCConfirmation = CRCMatch Number
-                     | CRCMismatch TelemetryCRC CalculatedCRC
-
-instance showCRCConfirmation :: Show CRCConfirmation where
-  show (CRCMatch n) = "CRC MATCH: " ++ show n
-  show (CRCMismatch (TelemetryCRC t) (CalculatedCRC c)) =
-    "CRC MISMATCH: expected(" ++ show c ++ ") /= received(" ++ show t ++ ")"
-
-isCRCMatch :: CRCConfirmation -> Boolean
-isCRCMatch (CRCMatch _) = true
-isCRCMatch _ = false
-
 data WSMessage =
   LocationBeacon { coordinates :: Coordinate
                  , altitude :: Number
                  , time :: String
-                 , crc :: CRCConfirmation
+                 , voltage :: Number
                  }
   | BeaconHistory [Coordinate]
 
@@ -43,18 +29,6 @@ instance readCoordinate :: IsForeign Coordinate where
                         , longitude: long
                         }
 
-instance readCRC :: IsForeign CRCConfirmation where
-  read value = do
-    match <- readProp "match" value
-    if match
-      then do
-        crc <- readProp "crc" value
-        return $ CRCMatch crc
-      else do
-        received <- TelemetryCRC <$> readProp "received" value
-        expected <- CalculatedCRC <$> readProp "expected" value
-        return $ CRCMismatch received expected
-
 instance readWSMessage :: IsForeign WSMessage where
   read value =
     if isArray value
@@ -65,11 +39,11 @@ instance readWSMessage :: IsForeign WSMessage where
         coord <- readProp "coordinates" value
         altitude <- readProp "altitude" value
         time <- readProp "time" value
-        crc <- readProp "crc" value
+        voltage <- readProp "voltage" value
         return $ LocationBeacon { coordinates: coord
                                 , altitude: altitude
                                 , time: time
-                                , crc: crc
+                                , voltage: voltage
                                 }
 
 foreign import unsafeShowJSON

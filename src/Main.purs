@@ -17,10 +17,8 @@ import Data.Foreign.Class
 import Data.Maybe
 import Data.String
 import Debug.Trace
-import DOM
 import MapView.DomHelpers
 import qualified MapView.Lookangle as L
-import MapView.Leaflet
 import MapView.WSTypes
 import MapView.WebSocket
 import GMaps.InfoWindow
@@ -32,6 +30,8 @@ import GMaps.MVCArray
 import GMaps.Polyline
 import Global
 import MomentJS
+
+--foreign import data DOM :: !
 
 setDismissAnnouncement :: forall eff. HTMLDocument -> Eff (dom :: DOM | eff) Unit
 setDismissAnnouncement doc = do
@@ -89,7 +89,7 @@ main = do
   --openInfoWindow iw roadmap marker
 
   --let example = "{\"coordinates\":{\"latitude\":43.714754626155,\"longitude\":-64.726791873574},\"altitude\":300,\"time\":\"1234321\"}"
-  socket <- newWebSocket "ws://mv-ws1-b.elrod.me:9160/"
+  socket <- newWebSocket "ws://127.0.0.1:9160/"
   addEventListenerWS socket "onmessage" $ (\x -> handleEvent x mvcA polyline marker gpsdMarker lastReceivedPacket roadmap)
   --sendWS socket example
 
@@ -122,14 +122,12 @@ main = do
                Left err -> trace $ "Error parsing JSON:\n" ++ show err
                Right (LocationBeacon result) -> do
                  --trace $ unsafeShowJSON result
-                 if isCRCMatch result.crc
-                   then do
-                     writeRef lastReceivedPacket (Just result)
-                     addToPath mvcA polyline marker roadmap result.coordinates
-                     updateLookangle result.coordinates result.altitude
-                     updateTimestamp result.time
-                     updateAltitude result.altitude
-                   else trace $ show result.crc
+                 writeRef lastReceivedPacket (Just result)
+                 addToPath mvcA polyline marker roadmap result.coordinates
+                 updateLookangle result.coordinates result.altitude
+                 updateTimestamp result.time
+                 updateAltitude result.altitude
+                 updateVoltage result.voltage
                Right (BeaconHistory coordinates) -> do
                  --trace $ unsafeShowJSON coordinates
                  traverse_ (addToPath mvcA polyline marker roadmap) coordinates
@@ -189,6 +187,17 @@ updateAltitude alt = do
   -- TODO: Partial
   Just altField <- getElementById "balloon_altitude" doc
   setInnerHTML (show alt) altField
+
+updateVoltage ::
+  forall eff.
+  Number
+  -> Eff (dom :: DOM | eff) Unit
+updateVoltage vlt = do
+  doc <- document globalWindow
+  -- TODO: Partial
+  Just vltField <- getElementById "balloon_voltage" doc
+  setInnerHTML (show vlt) vltField
+
 
 -- TODO: Fix partiality.
 updateLookangle ::
